@@ -8,7 +8,7 @@
     "object-assign": "^4.0.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.0",
-    "react-tween-state": "git://github.com/Joneser/react-tween-state"
+    "react-tween-state": "0.1.5"
   },
   "devDependencies": {
     "babel-core": "^5.8.25",
