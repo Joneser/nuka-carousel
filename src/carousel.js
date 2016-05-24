@@ -67,6 +67,7 @@ const Carousel = React.createClass({
     framePadding: React.PropTypes.string,
     initialSlideHeight: React.PropTypes.number,
     initialSlideWidth: React.PropTypes.number,
+    isMobile: React.PropTypes.bool,
     slideIndex: React.PropTypes.number,
     slidesToShow: React.PropTypes.number,
     slidesToScroll: React.PropTypes.oneOfType([
@@ -94,6 +95,7 @@ const Carousel = React.createClass({
       easing: 'easeOutCirc',
       edgeEasing: 'easeOutElastic',
       framePadding: '0px',
+      isMobile: false,
       slideIndex: 0,
       slidesToScroll: 1,
       slidesToShow: 1,
@@ -326,7 +328,8 @@ const Carousel = React.createClass({
     if (this.touchObject.length > (this.state.slideWidth / this.props.slidesToShow) / 5) {
       if (this.touchObject.direction === 1) {
         if (this.state.currentSlide >= React.Children.count(this.props.children) - this.props.slidesToShow) {
-          this.animateSlide(tweenState.easingTypes[this.props.edgeEasing]);
+          var animateTarget = this.props.isMobile ? -this.getMissingView() : null;
+          this.animateSlide(tweenState.easingTypes[this.props.edgeEasing], null, animateTarget);
         } else {
           this.nextSlide();
         }
@@ -450,9 +453,32 @@ const Carousel = React.createClass({
       offset = offset / 2;
     }
 
-    offset -= touchOffset || 0;
+   offset -= touchOffset || 0;
 
-    return ((this.state.slideWidth * this.state.currentSlide) - offset) * -1;
+    if(this.props.isMobile) {
+        var numberOfSegs = (this.props.children.length - this.props.slidesToShow) || 1;
+        var missing = this.getMissingView();
+        var slideOffset = this.state.currentSlide * (missing / numberOfSegs);
+        
+        return ((this.state.slideWidth * this.state.currentSlide - offset) * - 1) - slideOffset;
+    }
+    
+    return (this.state.slideWidth * this.state.currentSlide - offset) * - 1;
+  },
+  
+  // this is used for the case that the number of items and number of itemsToShow are the same
+  // But in the specific case when the screen is not big enough to show them
+  // When scrolling down, the list should be offset to show all of the last items
+  // when scrolling up, all of the first item should be visible
+  getMissingView: function getMissingView() {
+        // The total height that should be visible (slideheight * slides to be shown)
+        var slideVisibility = document.getElementsByClassName('slider-slide')[0].getBoundingClientRect().height * this.props.slidesToShow;
+        // the visible amount of the slide frame
+        var visibleFrame = window.outerHeight - document.getElementsByClassName('slider-frame')[0].getBoundingClientRect().top - 20;
+        // The height of the slider that wont be visible on mobile
+        var missing = slideVisibility - visibleFrame;
+        
+        return missing;
   },
 
   // Bootstrapping
