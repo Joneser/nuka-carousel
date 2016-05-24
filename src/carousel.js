@@ -67,6 +67,7 @@ const Carousel = React.createClass({
     framePadding: React.PropTypes.string,
     initialSlideHeight: React.PropTypes.number,
     initialSlideWidth: React.PropTypes.number,
+    isMobile: React.PropTypes.bool,
     slideIndex: React.PropTypes.number,
     slidesToShow: React.PropTypes.number,
     slidesToScroll: React.PropTypes.oneOfType([
@@ -94,6 +95,7 @@ const Carousel = React.createClass({
       easing: 'easeOutCirc',
       edgeEasing: 'easeOutElastic',
       framePadding: '0px',
+      isMobile: false,
       slideIndex: 0,
       slidesToScroll: 1,
       slidesToShow: 1,
@@ -450,9 +452,19 @@ const Carousel = React.createClass({
       offset = offset / 2;
     }
 
-    offset -= touchOffset || 0;
+   offset -= touchOffset || 0;
 
-    return ((this.state.slideWidth * this.state.currentSlide) - offset) * -1;
+    if(this.props.isMobile) {
+        var slideVisibility = document.getElementsByClassName('slider-slide')[0].getBoundingClientRect().height * this.props.slidesToShow;
+        var visibleFrame = window.outerHeight - document.getElementsByClassName('slider-frame')[0].getBoundingClientRect().top - 20;
+        var missing = slideVisibility - visibleFrame;
+        var numberOfSegs = this.props.children.length - this.props.slidesToShow;
+        var slideOffset = this.state.currentSlide * (missing / numberOfSegs);
+        
+        return ((this.state.slideWidth * this.state.currentSlide - offset) * - 1) - slideOffset;
+    }
+    
+    return (this.state.slideWidth * this.state.currentSlide - offset) * - 1;
   },
 
   // Bootstrapping
