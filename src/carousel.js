@@ -471,6 +471,9 @@ const Carousel = React.createClass({
   // When scrolling down, the list should be offset to show all of the last items
   // when scrolling up, all of the first item should be visible
   getMissingView: function getMissingView() {
+        if(this.props.children.length <= 1) {
+            return 0;
+        }
         // The total height that should be visible (slideheight * slides to be shown)
         var slideVisibility = document.getElementsByClassName('slider-slide')[0].getBoundingClientRect().height * this.props.slidesToShow;
         // the visible amount of the slide frame
