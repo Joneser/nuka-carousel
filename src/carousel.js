@@ -477,7 +477,10 @@ const Carousel = React.createClass({
         var visibleFrame = window.outerHeight - document.getElementsByClassName('slider-frame')[0].getBoundingClientRect().top - 20;
         // The height of the slider that wont be visible on mobile
         var missing = slideVisibility - visibleFrame;
-        
+        // you can't have a negative amount missing
+        if(missing < 0) {
+            return 0;
+        }
         return missing;
   },
 
