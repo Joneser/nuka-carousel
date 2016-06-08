@@ -328,8 +328,7 @@ const Carousel = React.createClass({
     if (this.touchObject.length > (this.state.slideWidth / this.props.slidesToShow) / 5) {
       if (this.touchObject.direction === 1) {
         if (this.state.currentSlide >= React.Children.count(this.props.children) - this.props.slidesToShow) {
-          var animateTarget = this.props.isMobile ? -this.getMissingView() : null;
-          this.animateSlide(tweenState.easingTypes[this.props.edgeEasing], null, animateTarget);
+          this.animateSlide(tweenState.easingTypes[this.props.edgeEasing]);
         } else {
           this.nextSlide();
         }
