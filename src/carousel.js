@@ -541,13 +541,13 @@ const Carousel = React.createClass({
 
   setDimensions: function setDimensions(slidesToShow) {
     var self = this,
-        slideWidth,
-        slidesToScroll,
-        firstSlide,
-        frame,
-        frameWidth,
-        frameHeight,
-        slideHeight;
+      slideWidth,
+      slidesToScroll,
+      firstSlide,
+      frame,
+      frameWidth,
+      frameHeight,
+      slideHeight;
 
     slidesToShow = slidesToShow || this.props.slidesToShow;
     slidesToScroll = this.props.slidesToScroll;
@@ -564,17 +564,17 @@ const Carousel = React.createClass({
       slideWidth = parseInt(this.props.slideWidth);
     } else {
       if (this.props.vertical) {
-        slideWidth = slideHeight / slidesToShow * this.props.slideWidth;
+        slideWidth = (slideHeight / slidesToShow) * this.props.slideWidth;
       } else {
-        slideWidth = frame.offsetWidth / slidesToShow * this.props.slideWidth;
+        slideWidth = (frame.offsetWidth / slidesToShow) * this.props.slideWidth;
       }
     }
 
     if (!this.props.vertical) {
-      slideWidth -= this.props.cellSpacing * ((100 - 100 / slidesToShow) / 100);
+      slideWidth -= this.props.cellSpacing * ((100 - (100 / slidesToShow)) / 100);
     }
 
-    frameHeight = slideHeight + this.props.cellSpacing / 2 * (slidesToShow - 1);
+    frameHeight = slideHeight + ((this.props.cellSpacing / 2) * (slidesToShow - 1));
 
     frameWidth = this.props.vertical ? frameHeight : frame.offsetWidth;
 
